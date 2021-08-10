@@ -89,11 +89,11 @@ class DirectorConfig
             '--project'   => (object) [
                 'value'       => '$jira_project$',
                 'required'    => true,
-                'description' => 'JIRA project name (e.g. ITSM)',
+                'description' => 'JIRA project name',
             ],
             '--issuetype' => (object) [
                 'value'       => '$jira_issuetype$',
-                'description' => 'JIRA issue type (e.g. Incident)',
+                'description' => 'JIRA issue type',
                 'required'    => true,
             ],
             '--summary' => (object) [

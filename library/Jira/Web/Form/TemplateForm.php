@@ -42,16 +42,16 @@ class TemplateForm extends BaseHtmlElement
             }
         ]));
 
-        $projectName = 'ITSM';
-        // $projectName = null;
+        // $projectName = 'ITSM';
+        $projectName = null;
 
         if ($projectName === null) {
             return;
         }
 
         $projects = $this->jira->get(sprintf(
-            // 'issue/createmeta?projectKeys=%s&expand=projects.issuetypes.fields',
-            'issue/createmeta?projectKeys=%s',
+            'issue/createmeta?projectKeys=%s&expand=projects.issuetypes.fields',
+            // 'issue/createmeta?projectKeys=%s',
             rawurlencode($projectName)
         ))->getResult()->projects;
 

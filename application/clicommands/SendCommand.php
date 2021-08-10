@@ -24,8 +24,8 @@ class SendCommand extends Command
      *
      * REQUIRED OPTIONS
      *
-     *   --project <project-name>     JIRA project name, like "ITSM"
-     *   --issuetype <type-name>      JIRA issue type, like "Incident"
+     *   --project <project-name>     JIRA project name
+     *   --issuetype <type-name>      JIRA issue type
      *   --summary <summary>          JIRA issue summary
      *   --description <description>  JIRA issue description text
      *   --state <state-name>         Icinga state
