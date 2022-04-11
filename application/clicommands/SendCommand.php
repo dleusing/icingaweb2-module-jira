@@ -68,6 +68,7 @@ class SendCommand extends Command
 
         $jira = $this->jira();
         $issue = $jira->eventuallyGetLatestOpenIssueFor($host, $service);
+        
         $config = Config::module('jira');
         
         $mm = $this->app->getModuleManager();
@@ -105,9 +106,6 @@ class SendCommand extends Command
             if ($tplName) {
                 $template->addByTemplateName($tplName);
             }
-            
-            $icingaStatus = $config->get('ui', 'field_icingaStatus', 'customfield_19220');
-            $currentStatus = isset($issue->fields->$icingaStatus) ? $issue->fields->$icingaStatus : null;
 
             $info->setNotificationType('PROBLEM'); // TODO: Once passed, we could deal with RECOVERY
             $template->setMonitoringInfo($info);
@@ -120,7 +118,8 @@ class SendCommand extends Command
             $ackMessage = "JIRA issue $key has been created";
         } else {
             $key = $issue->key;
-            $currentStatus = isset($issue->fields->icingaStatus) ? $issue->fields->icingaStatus : null;
+            $icingaStatus = $config->get('ui', 'field_icingaStatus', 'customfield_19220');
+            $currentStatus = isset($issue->fields->$icingaStatus) ? $issue->fields->$icingaStatus : null;            
             $ackMessage = "Existing JIRA issue $key has been found";
             if ($currentStatus !== $status) {
                 $update = new IssueUpdate($jira, $key);
