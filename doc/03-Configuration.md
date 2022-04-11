@@ -40,6 +40,10 @@ password = "Base64 encoded password here"
 ; default_project = "SO"
 ; default_issuetype = "Event"
 
+[jira_key_fields]
+; field_icingaStatus = "icingaStatus"
+; field_icingaKey = "icingaKey"
+
 [icingaweb]
 url = "https://icinga.example.com/icingaweb2"
 ```
