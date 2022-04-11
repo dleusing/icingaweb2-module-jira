@@ -5,6 +5,7 @@ namespace Icinga\Module\Jira\Clicommands;
 use Exception;
 use Icinga\Application\Icinga;
 use Icinga\Application\Logger;
+use Icinga\Application\Config;
 use Icinga\Module\Jira\IcingaCommandPipe;
 use Icinga\Module\Jira\Cli\Command;
 use Icinga\Module\Jira\IcingadbBackend;
@@ -67,6 +68,8 @@ class SendCommand extends Command
 
         $jira = $this->jira();
         $issue = $jira->eventuallyGetLatestOpenIssueFor($host, $service);
+        $config = Config::module('jira');
+        
         $mm = $this->app->getModuleManager();
         if ($p->shift('icingadb') || ! $mm->hasEnabled('monitoring')) {
             if (! $mm->hasEnabled('icingadb')) {
@@ -102,6 +105,9 @@ class SendCommand extends Command
             if ($tplName) {
                 $template->addByTemplateName($tplName);
             }
+            
+            $icingaStatus = $config->get('ui', 'field_icingaStatus', 'customfield_19220');
+            $currentStatus = isset($issue->fields->$icingaStatus) ? $issue->fields->$icingaStatus : null;
 
             $info->setNotificationType('PROBLEM'); // TODO: Once passed, we could deal with RECOVERY
             $template->setMonitoringInfo($info);
@@ -118,7 +124,7 @@ class SendCommand extends Command
             $ackMessage = "Existing JIRA issue $key has been found";
             if ($currentStatus !== $status) {
                 $update = new IssueUpdate($jira, $key);
-                $update->setCustomField('icingaStatus', $status);
+                $update->setCustomField($icingaStatus, $status);
                 $update->addComment("Status changed to $status\n" . $description);
                 $jira->updateIssue($update);
             }
